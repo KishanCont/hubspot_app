@@ -8,6 +8,10 @@ export const GET = async (req, res) => {
 
     const record = await getRecords(associatedObjectId);
 
+    return Response.json(CRMCardData);
+    // return res.status(200).json({ record });
+  } catch (error) {
+    console.log(error.message);
     return Response.json({
       results: [
         {
@@ -30,32 +34,9 @@ export const GET = async (req, res) => {
               value: "ijones@hubspot.com",
             },
           ],
-          actions: [
-            {
-              type: "IFRAME",
-              width: 890,
-              height: 748,
-              uri: "https://hubspot-app-sapm.onrender.com/",
-              label: "Edit",
-            },
-            {
-              type: "CONFIRMATION_ACTION_HOOK",
-              confirmationMessage:
-                "Are you sure you want to delete this ticket?",
-              confirmButtonText: "Yes",
-              cancelButtonText: "No",
-              httpMethod: "DELETE",
-              uri: "https://example.com/tickets/245",
-              label: "Delete",
-            },
-          ],
         },
       ],
     });
-    // return res.status(200).json({ record });
-  } catch (error) {
-    console.log(error.message);
-    return Response.json({ message: "error" });
   }
 };
 
