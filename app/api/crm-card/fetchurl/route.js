@@ -6,9 +6,51 @@ export const GET = async (req, res) => {
     const associatedObjectId =
       req.nextUrl.searchParams.get("associatedObjectId");
 
-    const record = await getRecords(associatedObjectId);
+    if (!associatedObjectId) {
+      return Response.json({
+        results: [
+          {
+            objectId: 200,
+            title: "AssociatedObjectID not defined",
+            link: "http://example.com/1",
+            created: "22 Feb 2024",
+            priority: "HIGH",
+            project: "API",
+            reported_by: "msmith@hubspot.com",
+            description:
+              "Customer reported that the APIs are just running too fast. This is causing a problem in that they're so happy.",
+            reporter_type: "Account Manager",
+            status: "In Progress",
+            ticket_type: "Bug",
+          },
+        ],
+      });
+    }
 
-    return Response.json(CRMCardData);
+    const record = await getRecords(associatedObjectId);
+    if (record) {
+      return Response.json(CRMCardData);
+    }
+
+    return Response.json({
+      results: [
+        {
+          objectId: 200,
+          title: "Record not defined",
+          link: "http://example.com/1",
+          created: "22 Feb 2024",
+          priority: "HIGH",
+          project: "API",
+          reported_by: "msmith@hubspot.com",
+          description:
+            "Customer reported that the APIs are just running too fast. This is causing a problem in that they're so happy.",
+          reporter_type: "Account Manager",
+          status: "In Progress",
+          ticket_type: "Bug",
+        },
+      ],
+    });
+
     // return res.status(200).json({ record });
   } catch (error) {
     console.log(error.message);
