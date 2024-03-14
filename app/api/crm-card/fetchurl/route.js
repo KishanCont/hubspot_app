@@ -5,25 +5,11 @@ export const GET = async (req, res) => {
   try {
     const associatedObjectId =
       req.nextUrl.searchParams.get("associatedObjectId");
+    console.log(associatedObjectId);
 
     if (!associatedObjectId) {
       return Response.json({
-        results: [
-          {
-            objectId: 200,
-            title: "AssociatedObjectID not defined",
-            link: "http://example.com/1",
-            created: "22 Feb 2024",
-            priority: "HIGH",
-            project: "API",
-            reported_by: "msmith@hubspot.com",
-            description:
-              "Customer reported that the APIs are just running too fast. This is causing a problem in that they're so happy.",
-            reporter_type: "Account Manager",
-            status: "In Progress",
-            ticket_type: "Bug",
-          },
-        ],
+        message: "No associatedObjectId provided",
       });
     }
 
@@ -33,51 +19,14 @@ export const GET = async (req, res) => {
     }
 
     return Response.json({
-      results: [
-        {
-          objectId: 200,
-          title: "Record not defined",
-          link: "http://example.com/1",
-          created: "22 Feb 2024",
-          priority: "HIGH",
-          project: "API",
-          reported_by: "msmith@hubspot.com",
-          description:
-            "Customer reported that the APIs are just running too fast. This is causing a problem in that they're so happy.",
-          reporter_type: "Account Manager",
-          status: "In Progress",
-          ticket_type: "Bug",
-        },
-      ],
+      message: "No record found",
     });
 
     // return res.status(200).json({ record });
   } catch (error) {
     console.log(error.message);
     return Response.json({
-      results: [
-        {
-          objectId: 200,
-          title: "API-22: APIs working too fast",
-          link: "http://example.com/1",
-          created: "22 Feb 2024",
-          priority: "HIGH",
-          project: "API",
-          reported_by: "msmith@hubspot.com",
-          description:
-            "Customer reported that the APIs are just running too fast. This is causing a problem in that they're so happy.",
-          reporter_type: "Account Manager",
-          status: "In Progress",
-          ticket_type: "Bug",
-          properties: [
-            {
-              label: "Resolved by",
-              dataType: "EMAIL",
-              value: "ijones@hubspot.com",
-            },
-          ],
-        },
-      ],
+      message: error.message,
     });
   }
 };
