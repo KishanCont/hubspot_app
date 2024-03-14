@@ -37,7 +37,7 @@ export const CRMCardData = {
           type: "IFRAME",
           width: 890,
           height: 748,
-          uri: "https://hubspot-app-plum.vercel.app/",
+          uri: "https://hubspot-app-sapm.onrender.com/",
           label: "Edit",
         },
         {

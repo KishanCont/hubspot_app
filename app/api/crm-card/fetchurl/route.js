@@ -5,9 +5,7 @@ export const GET = async (req, res) => {
     const associatedObjectId =
       req.nextUrl.searchParams.get("associatedObjectId");
     const record = await getRecords(associatedObjectId);
-    return Response.json({
-      CRMCardData,
-    });
+    return Response.json(CRMCardData);
     // return res.status(200).json({ record });
   } catch (error) {
     console.log(error.message);
