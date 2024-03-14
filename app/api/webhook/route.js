@@ -1,5 +1,5 @@
 import { HUBSPOT_API_KEY, HUBSPOT_APP_ID } from "@/constants";
-import hubspot from "@hubspot/api-client";
+const hubspot = require("@hubspot/api-client");
 
 const hubspotClient = new hubspot.Client({
   developerApiKey: HUBSPOT_API_KEY,
@@ -20,7 +20,7 @@ export const GET = async (req, res) => {
     );
     console.log(JSON.stringify(apiResponse, null, 2));
 
-    res.json(apiResponse);
+    return Response.json(apiResponse);
   } catch (e) {
     e.message === "HTTP request failed"
       ? console.error(JSON.stringify(e.response, null, 2))
@@ -41,6 +41,7 @@ export const POST = async (req, res) => {
       SubscriptionCreateRequest
     );
     console.log(JSON.stringify(apiResponse, null, 2));
+    return Response.json({ success: true });
   } catch (e) {
     e.message === "HTTP request failed"
       ? console.error(JSON.stringify(e.response, null, 2))

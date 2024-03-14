@@ -93,7 +93,7 @@ const TableDefinitionForm = ({ slug }) => {
             <TextField
               size={"small"}
               fullWidth
-              label="Table Name"
+              label="Column Name"
               value={item.columnHeader}
               onChange={(e) => {
                 setInputFields(

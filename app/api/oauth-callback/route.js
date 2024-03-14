@@ -6,8 +6,9 @@ import {
 } from "@/lib/utils";
 
 export const GET = async (req, res) => {
+  const authorizationCode = req.nextUrl.searchParams.get("flag");
   // Extract the authorization code from the query parameters
-  const authorizationCode = req.query.code;
+
   if (authorizationCode) {
     try {
       const tokens = await exchangeAuthorizationCodeForTokens(
