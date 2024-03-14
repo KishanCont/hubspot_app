@@ -28,6 +28,7 @@ const TableComponent = () => {
     setRows,
     rowModesModel,
     setRowModesModel,
+    columnsName,
   } = useTableContext();
 
   const router = useRouter();
