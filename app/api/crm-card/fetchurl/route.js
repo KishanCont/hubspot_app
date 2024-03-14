@@ -1,10 +1,12 @@
 import { CRMCardData } from "@/constants";
+import { getRecords } from "@/lib/utils";
 
 export const GET = async (req, res) => {
   try {
     const associatedObjectId =
       req.nextUrl.searchParams.get("associatedObjectId");
     const record = await getRecords(associatedObjectId);
+
     return Response.json(CRMCardData);
     // return res.status(200).json({ record });
   } catch (error) {

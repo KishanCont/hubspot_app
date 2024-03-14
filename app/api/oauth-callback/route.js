@@ -8,7 +8,6 @@ import {
 export const GET = async (req, res) => {
   const authorizationCode = req.nextUrl.searchParams.get("code");
   // Extract the authorization code from the query parameters
-
   if (authorizationCode) {
     try {
       const tokens = await exchangeAuthorizationCodeForTokens(
@@ -29,9 +28,14 @@ export const GET = async (req, res) => {
       await saveRefreshTokenToMongo(refreshToken, orgId);
       await createDatabase(orgId);
 
-      return Response.redirect("/api/success");
+      return Response.redirect(
+        "https://hubspot-app-sapm.onrender.com/api/success"
+      );
     } catch (error) {
       console.log(error);
+      return Response.json("Error exchanging authorization code for tokens");
     }
   }
+
+  return Response.json("No authorization code provided");
 };
