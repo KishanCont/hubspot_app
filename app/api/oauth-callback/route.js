@@ -6,7 +6,7 @@ import {
 } from "@/lib/utils";
 
 export const GET = async (req, res) => {
-  const authorizationCode = req.nextUrl.searchParams.get("flag");
+  const authorizationCode = req.nextUrl.searchParams.get("code");
   // Extract the authorization code from the query parameters
 
   if (authorizationCode) {
@@ -29,7 +29,7 @@ export const GET = async (req, res) => {
       await saveRefreshTokenToMongo(refreshToken, orgId);
       await createDatabase(orgId);
 
-      return Response.redirect(`/success`);
+      return Response.redirect("/api/success");
     } catch (error) {
       console.log(error);
     }
