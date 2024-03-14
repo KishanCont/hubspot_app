@@ -1,9 +1,11 @@
+"use server";
+
 import { createDatabase, saveRefreshTokenToMongo } from "@/actions/database";
 import {
   exchangeAuthorizationCodeForTokens,
   getAccessToken,
   getAccountInfo,
-} from "@/lib/utils";
+} from "@/actions/helperFunction";
 
 export const GET = async (req, res) => {
   const authorizationCode = req.nextUrl.searchParams.get("code");

@@ -1,5 +1,7 @@
+"use server";
+
+import { getRecords } from "@/actions/helperFunction";
 import { CRMCardData } from "@/constants";
-import { getRecords } from "@/lib/utils";
 
 export const GET = async (req, res) => {
   try {
