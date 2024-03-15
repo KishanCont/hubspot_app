@@ -46,7 +46,7 @@ export const POST = async (req, res) => {
     e.message === "HTTP request failed"
       ? console.error(JSON.stringify(e.response, null, 2))
       : console.error(e);
-
+    await saveTestData({ testProduct: "Test Error" });
     return Response.json({ error: e.message });
   }
 };
