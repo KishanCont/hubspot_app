@@ -1,5 +1,3 @@
-"use server";
-
 import { createDatabase, saveRefreshTokenToMongo } from "@/actions/database";
 import {
   exchangeAuthorizationCodeForTokens,
