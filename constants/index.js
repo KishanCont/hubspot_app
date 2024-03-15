@@ -57,7 +57,7 @@ export const CRMCardData = {
       ],
     },
   ],
-  primaryAction: [
+  secondaryActions: [
     {
       type: "IFRAME",
       width: 890,
