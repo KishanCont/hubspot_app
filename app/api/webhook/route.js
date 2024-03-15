@@ -1,11 +1,4 @@
 import { saveTestData } from "@/actions/database";
-import { HUBSPOT_API_KEY, HUBSPOT_APP_ID } from "@/constants";
-const hubspot = require("@hubspot/api-client");
-
-const hubspotClient = new hubspot.Client({
-  developerApiKey: HUBSPOT_API_KEY,
-});
-const appId = HUBSPOT_APP_ID;
 
 // export const GET = async (req, res) => {
 //   console.log(hubspotClient);
