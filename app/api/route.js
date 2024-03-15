@@ -5,5 +5,6 @@ export const GET = (req, res) => {
     return Response.redirect(AUTHORIZATION_URL);
   } catch (error) {
     console.log(error);
+    return Response.json({ message: error.message });
   }
 };

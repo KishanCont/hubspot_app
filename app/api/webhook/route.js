@@ -25,6 +25,7 @@ export const GET = async (req, res) => {
     e.message === "HTTP request failed"
       ? console.error(JSON.stringify(e.response, null, 2))
       : console.error(e);
+    return Response.json({ success: e.message });
   }
 };
 
@@ -46,5 +47,7 @@ export const POST = async (req, res) => {
     e.message === "HTTP request failed"
       ? console.error(JSON.stringify(e.response, null, 2))
       : console.error(e);
+
+    return Response.json({ error: e.message });
   }
 };
