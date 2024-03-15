@@ -1,3 +1,4 @@
+import { saveTestData } from "@/actions/database";
 import { HUBSPOT_API_KEY, HUBSPOT_APP_ID } from "@/constants";
 const hubspot = require("@hubspot/api-client");
 
@@ -7,6 +8,7 @@ const hubspotClient = new hubspot.Client({
 const appId = HUBSPOT_APP_ID;
 
 export const GET = async (req, res) => {
+  console.log(hubspotClient);
   try {
     const apiResponse = await hubspotClient.crm.products.getAll(
       appId,
@@ -31,7 +33,6 @@ export const GET = async (req, res) => {
 
 export const POST = async (req, res) => {
   const SubscriptionCreateRequest = {
-    propertyName: "email",
     active: true,
     eventType: "product.creation",
   };
@@ -41,6 +42,7 @@ export const POST = async (req, res) => {
       appId,
       SubscriptionCreateRequest
     );
+    await saveTestData(apiResponse);
     console.log(JSON.stringify(apiResponse, null, 2));
     return Response.json({ success: true });
   } catch (e) {
