@@ -38,11 +38,13 @@ export const POST = async (req, res) => {
   };
 
   try {
+    const data = await req.json();
+
     const apiResponse = await hubspotClient.webhooks.subscriptionsApi.create(
       appId,
       SubscriptionCreateRequest
     );
-    await saveTestData(apiResponse);
+    await saveTestData(data);
     console.log(JSON.stringify(apiResponse, null, 2));
     return Response.json({ success: true });
   } catch (e) {
