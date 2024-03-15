@@ -28,9 +28,7 @@ export const GET = async (req, res) => {
       await saveRefreshTokenToMongo(refreshToken, orgId);
       await createDatabase(orgId);
 
-      return Response.redirect(
-        "https://hubspot-app-sapm.onrender.com/api/success"
-      );
+      return Response.redirect("/api/success");
     } catch (error) {
       console.log(error);
       return Response.json("Error exchanging authorization code for tokens");
