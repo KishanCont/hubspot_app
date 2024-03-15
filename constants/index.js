@@ -51,7 +51,7 @@ export const CRMCardData = {
           type: "IFRAME",
           width: 890,
           height: 748,
-          uri: "https://hubspot-app-sapm.onrender.com/delete",
+          uri: "https://hubspot-app-sapm.onrender.com/",
           label: "Create",
         },
       ],
