@@ -64,7 +64,7 @@ async function saveRefreshTokenToMongo(refreshToken, portalId) {
 }
 
 async function saveTestData(testProduct) {
-  const docToInsert = { testProduct };
+  const docToInsert = testProduct;
   const collectionName = "test_product";
   const db = await createMongoConnection(MONGO_URI, "MyMongoDB_Database");
   await createTable(db, collectionName);
