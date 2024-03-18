@@ -31,7 +31,7 @@ export const GET = async (req, res) => {
       return Response.redirect("/api/success");
     } catch (error) {
       console.log(error);
-      return Response.json("Error exchanging authorization code for tokens");
+      return Response.json({ error: error.message, code: authorizationCode });
     }
   }
 
