@@ -48,19 +48,28 @@ const documentsToInsert = [
     output_percentage: 5,
   },
 ];
-// (async () => {
-//   const db = await createMongoConnection(url, dbName);
-//   // await createTable(db, collectionName);
-//   // await insertDocuments(db, collectionName, documentsToInsert);
-//   db.client.close();
-// })();
+
 async function saveRefreshTokenToMongo(refreshToken, portalId) {
   const docToInsert = { account: portalId, refresh: refreshToken };
   const collectionName = "RefreshTokens";
   const db = await createMongoConnection(MONGO_URI, "Token_Database");
-  await createTable(db, collectionName);
-  await insertDocuments(db, collectionName, docToInsert);
-  db.client.close();
+
+  try {
+    const collection = db.collection(collectionName);
+    if (await collection.find({ account: portalId })) {
+      await collection.updateOne(
+        { account: portalId },
+        { $set: { refresh: refreshToken } },
+        { upsert: true }
+      );
+      console.log("Data updated successfully");
+    } else {
+      await collection.insertOne(docToInsert);
+      console.log("Data inserted successfully");
+    }
+  } catch (err) {
+    console.error(`Error: ${err.message}`);
+  }
 }
 
 async function saveTestData(testProduct) {
@@ -74,9 +83,7 @@ async function saveTestData(testProduct) {
 
 async function createDatabase(portalId) {
   const dbName = `Account_${portalId}`;
-  const connectionUrl =
-    "mongodb+srv://Sooraj:jee1JatiFManli3B@sooraj.dgkx1a8.mongodb.net/" +
-    dbName;
+  const connectionUrl = MONGO_URI + dbName;
   try {
     const client = new MongoClient(connectionUrl, { useUnifiedTopology: true });
     await client.connect();
@@ -91,8 +98,6 @@ async function createDatabase(portalId) {
     console.error(`Error: ${err.message}`);
   }
 }
-
-createDatabase(27147324);
 
 async function createWebhookDatabase(dbName) {
   const connectionUrl = MONGO_URI + dbName;

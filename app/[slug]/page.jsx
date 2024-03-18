@@ -1,6 +1,5 @@
-import TableDefinitionForm from "@/components/TableDefinitionForm";
 import { Box, Card, CardContent, Container, Typography } from "@mui/material";
-
+import TableDefinitionForm from "@/components/TableDefinitionForm";
 const TableDefinition = ({ params: { slug } }) => {
   return (
     <Container>

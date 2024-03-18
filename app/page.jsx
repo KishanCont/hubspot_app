@@ -1,25 +1,13 @@
 "use client";
-import { getList } from "@/actions/retrieval";
-import { MONGO_DB_NAME, MONGO_URI } from "@/constants";
 import { generateSlug } from "@/lib/utils";
-import { useTableContext } from "@/providers/TableContext";
 import { Box, Button, Container, TextField } from "@mui/material";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const page = () => {
-  const { tableName, setTableName } = useTableContext();
+  const [tableName, setTableName] = useState("");
   const router = useRouter();
-  const [collection, setCollection] = useState([]);
-
-  useEffect(() => {
-    getList(
-      "mongodb+srv://Sooraj:jee1JatiFManli3B@sooraj.dgkx1a8.mongodb.net",
-      "MyMongoDB_Database"
-    )
-      .then((res) => JSON.parse(res))
-      .then((data) => console.log(data));
-  }, []);
 
   return (
     <Container>
@@ -41,15 +29,15 @@ const page = () => {
         <Button
           variant="outlined"
           onClick={() => {
+            if (tableName.length > 0) {
+              localStorage.setItem("tableName", JSON.stringify(tableName));
+            }
             router.push(`/${generateSlug(tableName)}`);
           }}
         >
           Create
         </Button>
       </Box>
-      {collection.map((collection) => (
-        <h1 key={collection}>{collection}</h1>
-      ))}
     </Container>
   );
 };

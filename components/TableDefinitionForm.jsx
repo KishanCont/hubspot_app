@@ -1,6 +1,5 @@
 "use client";
 
-import { useTableContext } from "@/providers/TableContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Box,
@@ -13,11 +12,18 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const TableDefinitionForm = ({ slug }) => {
-  const { tableName, inputFields, setInputFields } = useTableContext();
+  const [inputFields, setInputFields] = useState([
+    { columnHeader: "", headerType: "", dataType: "" },
+  ]);
+  const [tableName, setTableName] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    setTableName(JSON.parse(localStorage.getItem("tableName")));
+  }, []);
 
   const removeRow = (index) => {
     if (inputFields.length === 1) {
@@ -58,6 +64,8 @@ const TableDefinitionForm = ({ slug }) => {
       alert("At least one output field is required and cannot exceed 3.");
       return;
     }
+
+    localStorage.setItem("inputFields", JSON.stringify(inputFields));
 
     router.push(`/${slug}/table`);
   };
