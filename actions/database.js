@@ -73,12 +73,16 @@ async function saveTestData(testProduct) {
 }
 
 async function createDatabase(portalId) {
-  const dbName = "/Account_" + portalId;
+  const dbName = `/Account_${portalId}`;
   const connectionUrl = MONGO_URI + dbName;
   try {
     const client = new MongoClient(connectionUrl, { useUnifiedTopology: true });
     await client.connect();
-    await createTable(client.db(dbName), "Test_Collection");
+    await insertDocuments(
+      client.db(dbName),
+      "Test_collection",
+      documentsToInsert
+    );
     console.log("MongoDB Connection Successful");
     client.close();
   } catch (err) {
