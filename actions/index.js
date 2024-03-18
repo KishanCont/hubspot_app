@@ -1,5 +1,6 @@
 "use server";
 
+import { MONGO_DB_NAME, MONGO_URI } from "@/constants";
 import { MongoClient } from "mongodb";
 async function createCollection(url, dbName, collectionName) {
   try {
@@ -24,11 +25,9 @@ async function insertDocuments(db, collectionName, documents) {
 }
 
 //const collectionName = "Glasses";
-const dbName = process.env.DB_NAME;
-const url = process.env.MONGO_URI;
 
 async function saveCollection(collectionName, docToInsert) {
-  const db = await createCollection(url, dbName, collectionName);
+  const db = await createCollection(MONGO_URI, MONGO_DB_NAME, collectionName);
   await insertDocuments(db, collectionName, docToInsert);
   db.client.close();
 }
