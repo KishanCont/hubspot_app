@@ -78,6 +78,7 @@ async function createDatabase(portalId) {
   try {
     const client = new MongoClient(connectionUrl, { useUnifiedTopology: true });
     await client.connect();
+    await createTable(client.db(dbName), "Test_Collection");
     console.log("MongoDB Connection Successful");
     client.close();
   } catch (err) {
