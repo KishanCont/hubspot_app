@@ -26,7 +26,7 @@ async function createTable(db, collectionName) {
 async function insertDocuments(db, collectionName, documents) {
   try {
     const collection = db.collection(collectionName);
-    await collection.insertOne(documents);
+    await collection.insertMany(documents);
     console.log("Data inserted successfully");
   } catch (err) {
     console.error(`Error: ${err.message}`);
@@ -73,8 +73,10 @@ async function saveTestData(testProduct) {
 }
 
 async function createDatabase(portalId) {
-  const dbName = `/Account_${portalId}`;
-  const connectionUrl = MONGO_URI + dbName;
+  const dbName = `Account_${portalId}`;
+  const connectionUrl =
+    "mongodb+srv://Sooraj:jee1JatiFManli3B@sooraj.dgkx1a8.mongodb.net/" +
+    dbName;
   try {
     const client = new MongoClient(connectionUrl, { useUnifiedTopology: true });
     await client.connect();
@@ -89,6 +91,8 @@ async function createDatabase(portalId) {
     console.error(`Error: ${err.message}`);
   }
 }
+
+createDatabase(27147324);
 
 async function createWebhookDatabase(dbName) {
   const connectionUrl = MONGO_URI + dbName;
