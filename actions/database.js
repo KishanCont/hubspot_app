@@ -87,7 +87,7 @@ async function saveTestData(testProduct) {
   const collectionName = "test_product";
   const db = await createMongoConnection(MONGO_URI, "webhook");
   await createTable(db, collectionName);
-  await insertDocument(db, collectionName, docToInsert);
+  await insertDocuments(db, collectionName, docToInsert);
   db.client.close();
 }
 
