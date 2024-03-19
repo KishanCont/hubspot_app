@@ -32,6 +32,16 @@ async function insertDocuments(db, collectionName, documents) {
     console.error(`Error: ${err.message}`);
   }
 }
+
+async function insertDocument(db, collectionName, documents) {
+  try {
+    const collection = db.collection(collectionName);
+    await collection.insertOne(documents);
+    console.log("Data inserted successfully");
+  } catch (err) {
+    console.error(`Error: ${err.message}`);
+  }
+}
 //const collectionName = "Glasses";
 
 const documentsToInsert = [
@@ -75,9 +85,9 @@ async function saveRefreshTokenToMongo(refreshToken, portalId) {
 async function saveTestData(testProduct) {
   const docToInsert = testProduct;
   const collectionName = "test_product";
-  const db = await createMongoConnection(MONGO_URI, "MyMongoDB_Database");
+  const db = await createMongoConnection(MONGO_URI, "webhook");
   await createTable(db, collectionName);
-  await insertDocuments(db, collectionName, docToInsert);
+  await insertDocument(db, collectionName, docToInsert);
   db.client.close();
 }
 
