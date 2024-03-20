@@ -13,9 +13,19 @@ export async function getRecords(dealId, portalId) {
       },
     });
 
-    return response.data;
+    let data = [];
+    response.data.results.map((item, index) => {
+      data.push({
+        objectId: Number(item.id),
+        title: `Product ${index + 1}`,
+        quantity: Number(item.properties.quantity),
+        amount: Number(item.properties.amount),
+      });
+    });
+
+    return data;
   } catch (error) {
-    console.error(error.message);
+    console.log(error.message);
   }
 }
 

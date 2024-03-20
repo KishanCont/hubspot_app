@@ -17,15 +17,17 @@ export const GET = async (req, res) => {
       Number(associatedObjectId),
       Number(portalId)
     );
+
     if (!record) {
       return Response.json({
         message: "No record found",
       });
     }
 
-    return Response.json(CRMCardData);
+    return Response.json({
+      results: record,
+    });
   } catch (error) {
-    console.log(error.message);
     return Response.json({
       message: error.message,
     });

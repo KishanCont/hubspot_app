@@ -32,23 +32,4 @@ async function saveCollection(collectionName, docToInsert) {
   db.client.close();
 }
 
-// saveCollection("table", [
-//   {
-//     columnsName: [
-//       {
-//         columnName: "Name",
-//         columnType: "input",
-//         dataType: "text",
-//       },
-//       {
-//         columnName: "Name",
-//         columnType: "input",
-//         dataType: "text",
-//       },
-//     ],
-//   },
-// ]);
-
-// export default saveCollection;
-
 export default saveCollection;
