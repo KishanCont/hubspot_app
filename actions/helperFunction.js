@@ -1,15 +1,15 @@
 "use server";
 
-import { REFRESH_TOKEN } from "@/constants";
 import axios from "axios";
+import { getAccessToken } from "./authToken";
 
-export async function getRecords(dealId) {
+export async function getRecords(dealId, portalId) {
   const getLineItems = `https://api.hubapi.com/crm/v3/objects/line_items?associations.deals=${dealId}`;
   try {
-    const data = await getAccessToken(REFRESH_TOKEN);
+    const accessToken = await getAccessToken(portalId);
     const response = await axios.get(getLineItems, {
       headers: {
-        Authorization: `Bearer ${data.access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
 

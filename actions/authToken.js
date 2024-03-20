@@ -14,10 +14,7 @@ export async function getAccessToken(portalId) {
     dbClient.close();
     return accessToken;
   } catch (error) {
-    console.error(
-      "Error exchanging authorization code for tokens:",
-      error.message
-    );
+    console.error("not get access token", error.message);
   }
 }
 

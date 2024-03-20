@@ -5,6 +5,7 @@ export const GET = async (req, res) => {
   try {
     const associatedObjectId =
       req.nextUrl.searchParams.get("associatedObjectId");
+    const portalId = req.nextUrl.searchParams.get("portalId");
 
     if (!associatedObjectId) {
       return Response.json({
@@ -12,7 +13,7 @@ export const GET = async (req, res) => {
       });
     }
 
-    const record = await getRecords(associatedObjectId);
+    const record = await getRecords(associatedObjectId, portalId);
     if (record) {
       return Response.json(CRMCardData);
     }
