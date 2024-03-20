@@ -24,7 +24,7 @@ export const GET = async (req, res) => {
       const portalId = accountInfo.portalId;
 
       await saveRefreshTokenToMongo(refreshToken, portalId);
-      await createDatabase(orgId);
+      await createDatabase(portalId);
 
       return Response.redirect(`${process.env.DOMAIN}/api/success`);
     } catch (error) {
