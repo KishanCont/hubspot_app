@@ -3,15 +3,15 @@
 import { getCollectionList } from "@/actions/retrieval";
 import { generateSlug } from "@/lib/utils";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getCookie } from "cookies-next";
 
 const DashboardPage = () => {
   const [collection, setCollection] = useState([]);
+  const params = useSearchParams();
 
   useEffect(() => {
-    const portalId = getCookie("portalId");
-    console.log(portalId);
+    const portalId = params.get("portalId");
     if (portalId) {
       getCollectionList(`Account_${portalId}`)
         .then((res) => setCollection(res))

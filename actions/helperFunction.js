@@ -21,6 +21,15 @@ export async function getRecords(dealId, portalId) {
         link: null,
         quantity: Number(item.properties.quantity),
         amount: Number(item.properties.amount),
+        actions: [
+          {
+            type: "IFRAME",
+            width: 890,
+            height: 748,
+            uri: `https://hubspot-app-sapm.onrender.com/dashbaord?portalId=${portalId}&dealId=${dealId}`,
+            label: "View",
+          },
+        ],
       });
     });
 

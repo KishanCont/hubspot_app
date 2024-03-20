@@ -8,6 +8,7 @@ const SeperatePage = ({ params }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
+    const portalId = sessionStorage.getItem("portalId");
     getCollectionData(`Account_${portalId}`, params.table)
       .then((res) => setData(res))
       .catch((error) => console.log(error));

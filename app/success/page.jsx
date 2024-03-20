@@ -1,16 +1,17 @@
 "use client";
 
 import { runFireworks } from "@/lib/utils";
-import React from "react";
-import { useEffect } from "react";
 import { Button } from "@mui/material";
-import axios from "axios";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
-const SuccessPage = ({ params }) => {
+const SuccessPage = () => {
+  const params = useSearchParams();
+
   useEffect(() => {
     runFireworks();
-    localStorage.setItem("portalId", params.portalId);
+    sessionStorage.setItem("portalId", params.get("portalId"));
   }, []);
   return (
     <div className="flex flex-col items-center justify-center h-screen gap-4 m-auto max-w-7xl">
@@ -19,7 +20,9 @@ const SuccessPage = ({ params }) => {
       </h1>
       <Button variant="outlined">
         <Link
-          href={`https://app.hubspot.com/discover/${params.portalId}/library/dashboards`}
+          href={`https://app.hubspot.com/discover/${params.get(
+            "portalId"
+          )}/library/dashboards`}
         >
           Go Back to Dashboard
         </Link>
