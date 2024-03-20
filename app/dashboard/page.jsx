@@ -8,8 +8,8 @@ import { useEffect, useState } from "react";
 const DashboardPage = ({ searchParams }) => {
   const [collection, setCollection] = useState([]);
 
+  const portalId = searchParams.portalId;
   useEffect(() => {
-    const portalId = Number(searchParams.portalId);
     if (portalId) {
       getCollectionList(`Account_${portalId}`)
         .then((res) => setCollection(res))
