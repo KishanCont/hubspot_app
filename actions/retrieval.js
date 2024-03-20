@@ -1,14 +1,14 @@
 "use server";
 
 import { MongoClient } from "mongodb";
+import { createMongoConnection } from "./dbConnetion";
 // Connection URI //Account_portalId
-export async function getList(uri, databaseName) {
+export async function getCollectionList(databaseName) {
   // Create a new MongoClient
   try {
-    const client = new MongoClient(uri);
-    await client.connect();
-    const dbo = client.db(databaseName);
-    const collections = await dbo.listCollections().toArray();
+    const dbClient = await createMongoConnection();
+    const db = dbClient.db(databaseName);
+    const collections = await db.listCollections().toArray();
     const documents = [];
     collections.map((collection) => {
       documents.push({
@@ -23,15 +23,14 @@ export async function getList(uri, databaseName) {
   }
 }
 
-export async function getCollection(uri, databaseName, selectedCollection) {
+export async function getCollectionData(databaseName, selectedCollection) {
   // Create a new MongoClient
   try {
-    const client = new MongoClient(uri);
-    await client.connect();
-    const dbo = client.db(databaseName);
+    const dbClient = await createMongoConnection();
+    const db = dbClient.db(databaseName);
     let query = {};
-    const collections = await dbo.collection(selectedCollection);
-    const documents = await collections.find(query).toArray();
+    const collections = db.collection(selectedCollection);
+    const documents = await collections.find(query).limit().toArray();
     let data = [];
 
     documents.map((document) => {
@@ -42,6 +41,7 @@ export async function getCollection(uri, databaseName, selectedCollection) {
         rows: document.rows,
       });
     });
+    dbClient.close();
     return data;
   } catch (error) {
     console.log(error.message);
@@ -62,28 +62,6 @@ async function updateCollection(
   documents.forEach((document) => {
     console.log("Columns:", document.columnsName);
     console.log("Rows:", document.rows);
-  });
-  client.close();
-}
-async function dropCollection(uri, databaseName, selectedCollection) {
-  // Create a new MongoClient
-  const client = await MongoClient.connect(uri);
-  const dbo = client.db(databaseName);
-  await dbo.collection(selectedCollection).drop(function (err, delOK) {
-    if (err) throw err;
-    if (delOK) console.log("Collection deleted");
-    db.close();
-  });
-  client.close();
-}
-async function renameCollection(uri, databaseName, selectedCollection) {
-  // Create a new MongoClient
-  const client = await MongoClient.connect(uri);
-  const dbo = client.db(databaseName);
-  await dbo.collection(selectedCollection).rename(newname, function (err, res) {
-    if (err) throw err;
-    console.log("Collection deleted");
-    db.close();
   });
   client.close();
 }

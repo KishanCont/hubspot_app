@@ -1,6 +1,6 @@
 "use client";
 
-import { getList } from "@/actions/retrieval";
+import { getCollectionList } from "@/actions/retrieval";
 import { MONGO_DB_NAME, MONGO_URI } from "@/constants";
 import { generateSlug } from "@/lib/utils";
 import Link from "next/link";
@@ -10,7 +10,7 @@ const DashboardPage = () => {
   const [collection, setCollection] = useState([]);
 
   useEffect(() => {
-    getList(MONGO_URI, MONGO_DB_NAME)
+    getCollectionList(MONGO_URI, MONGO_DB_NAME)
       .then((res) => setCollection(res))
       .catch((error) => console.log(error));
   }, []);

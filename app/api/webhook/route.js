@@ -1,39 +1,17 @@
-import { saveTestData } from "@/actions/database";
-
-// export const GET = async (req, res) => {
-//   console.log(hubspotClient);
-//   try {
-//     const apiResponse = await hubspotClient.crm.products.getAll(
-//       appId,
-//       (err, data) => {
-//         if (err) {
-//           console.log(err);
-//         } else {
-//           console.log(data);
-//         }
-//       }
-//     );
-//     console.log(JSON.stringify(apiResponse, null, 2));
-
-//     return Response.json(apiResponse);
-//   } catch (e) {
-//     e.message === "HTTP request failed"
-//       ? console.error(JSON.stringify(e.response, null, 2))
-//       : console.error(e);
-//     return Response.json({ success: e.message });
-//   }
-// };
+import { createMongoConnection } from "@/actions/dbConnetion";
+import { createProductCollection } from "@/actions/webhook";
 
 export const POST = async (req, res) => {
   try {
     const data = await req.json();
+    const { objectId, portalId } = data[0];
+    const dbName = `Account_${data[0].portalId}`;
+    const dbClient = await createMongoConnection();
+    const db = dbClient.db(dbName);
 
-    if (data) {
-      await saveTestData(data);
-    } else {
-      await saveTestData({ testProduct: "Test Product" });
-    }
-
+    await createProductCollection(db, objectId, portalId);
+    db;
+    dbClient.close();
     return Response.json({ success: "Data saved to MongoDB" });
   } catch (e) {
     e.message === "HTTP request failed"
