@@ -6,12 +6,9 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-const SuccessPage = () => {
-  const params = useSearchParams();
-
+const SuccessPage = ({ searchParams }) => {
   useEffect(() => {
     runFireworks();
-    sessionStorage.setItem("portalId", params.get("portalId"));
   }, []);
   return (
     <div className="flex flex-col items-center justify-center h-screen gap-4 m-auto max-w-7xl">
@@ -20,9 +17,7 @@ const SuccessPage = () => {
       </h1>
       <Button variant="outlined">
         <Link
-          href={`https://app.hubspot.com/discover/${params.get(
-            "portalId"
-          )}/library/dashboards`}
+          href={`https://app.hubspot.com/discover/${searchParams.portalId}/library/dashboards`}
         >
           Go Back to Dashboard
         </Link>

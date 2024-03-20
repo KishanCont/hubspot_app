@@ -3,15 +3,13 @@
 import { getCollectionList } from "@/actions/retrieval";
 import { generateSlug } from "@/lib/utils";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const DashboardPage = () => {
+const DashboardPage = ({ searchParams }) => {
   const [collection, setCollection] = useState([]);
-  const params = useSearchParams();
 
   useEffect(() => {
-    const portalId = params.get("portalId");
+    const portalId = Number(searchParams.portalId);
     if (portalId) {
       getCollectionList(`Account_${portalId}`)
         .then((res) => setCollection(res))
