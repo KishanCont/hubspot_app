@@ -1,14 +1,16 @@
 "use client";
 
+import { getCookies } from "@/actions/helperFunction";
 import { getCollectionData } from "@/actions/retrieval";
 import TableComponent from "@/components/TableComponent";
-import { MONGO_DB_NAME, MONGO_URI } from "@/constants";
+
 import { useEffect, useState } from "react";
 
 const SeperatePage = ({ params }) => {
   const [data, setData] = useState([]);
+  const { portalId } = getCookies();
   useEffect(() => {
-    getCollectionData(MONGO_URI, MONGO_DB_NAME, params.table)
+    getCollectionData(`Account_${portalId}`, params.table)
       .then((res) => setData(res))
       .catch((error) => console.log(error));
   }, []);

@@ -1,11 +1,11 @@
 import { getRecords } from "@/actions/helperFunction";
-import { CRMCardData } from "@/constants";
 
 export const GET = async (req, res) => {
   try {
     const associatedObjectId =
       req.nextUrl.searchParams.get("associatedObjectId");
     const portalId = req.nextUrl.searchParams.get("portalId");
+    const userId = req.nextUrl.searchParams.get("userId");
 
     if (!associatedObjectId) {
       return Response.json({
