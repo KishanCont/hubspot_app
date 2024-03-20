@@ -3,7 +3,7 @@ import { MongoClient } from "mongodb";
 
 export async function createMongoConnection() {
   try {
-    const client = new MongoClient(MONGO_URI, { useUnifiedTopology: true });
+    const client = new MongoClient(MONGO_URI);
     await client.connect();
     console.log("MongoDB Connection Successful");
     return client;

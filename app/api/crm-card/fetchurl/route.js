@@ -13,14 +13,17 @@ export const GET = async (req, res) => {
       });
     }
 
-    const record = await getRecords(associatedObjectId, portalId);
-    if (record) {
-      return Response.json(CRMCardData);
+    const record = await getRecords(
+      Number(associatedObjectId),
+      Number(portalId)
+    );
+    if (!record) {
+      return Response.json({
+        message: "No record found",
+      });
     }
 
-    return Response.json({
-      message: "No record found",
-    });
+    return Response.json(CRMCardData);
   } catch (error) {
     console.log(error.message);
     return Response.json({

@@ -8,7 +8,6 @@ export const PORT = process.env.PORT || 5000;
 export const HUBSPOT_API_KEY = process.env.HUBSPOT_API_KEY;
 export const HUBSPOT_APP_ID = process.env.HUBSPOT_APP_ID;
 export const MONGO_DB_NAME = process.env.NEXT_PUBLIC_DB_NAME;
-export const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
 
 export const CRMCardData = {
   results: [

@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI } from "@/constants";
+import { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI } from "@/constants/";
 import { createMongoConnection } from "./dbConnetion";
 import axios from "axios";
 
@@ -36,9 +36,9 @@ export async function getAccessTokenWithRefreshToken(refreshToken) {
       },
       data: params,
     });
-    console.log("ACCESS TOKEN", response.data.access_token);
+
     return response.data.access_token;
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 }
