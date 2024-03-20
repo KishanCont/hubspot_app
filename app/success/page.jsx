@@ -8,9 +8,9 @@ import axios from "axios";
 import Link from "next/link";
 
 const SuccessPage = ({ params }) => {
-  console.log(params);
   useEffect(() => {
     runFireworks();
+    localStorage.setItem("portalId", params.portalId);
   }, []);
   return (
     <div className="flex flex-col items-center justify-center h-screen gap-4 m-auto max-w-7xl">
@@ -18,7 +18,11 @@ const SuccessPage = ({ params }) => {
         App Installed Successfully
       </h1>
       <Button variant="outlined">
-        <Link href="/dashboard">Go Back to Dashboard</Link>
+        <Link
+          href={`https://app.hubspot.com/discover/${params.portalId}/library/dashboards`}
+        >
+          Go Back to Dashboard
+        </Link>
       </Button>
     </div>
   );
