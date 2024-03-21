@@ -30,15 +30,17 @@ export async function getCollectionData(databaseName, selectedCollection) {
     const db = dbClient.db(databaseName);
     let query = {};
     const collections = db.collection(selectedCollection);
-    const documents = await collections.find(query).limit().toArray();
+    const documents = await collections.find(query).toArray();
     let data = [];
 
     documents.map((document) => {
       data.push({
         id: document._id.toString(),
-        tableName: document.tableName,
-        columnsName: document.columnsName,
-        rows: document.rows,
+        billing_start_date: document.billing_start_date,
+        term: document.term,
+        billing_frequency: document.billing_frequency,
+        quantity: document.quantity,
+        discount: document.discount,
       });
     });
     dbClient.close();
