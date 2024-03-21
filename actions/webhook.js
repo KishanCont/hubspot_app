@@ -47,9 +47,9 @@ export async function dropCollection(dbClient, objectId, portalId) {
   try {
     const accessToken = await getAccessToken(portalId);
     const product = await getProduct(objectId, accessToken);
-    await dbClient.dropCollection(
-      generateSlug(`${product.properties.name}_${objectId}`)
-    );
+    await dbClient
+      .collection(generateSlug(`${product.properties.name}_${objectId}`))
+      .drop();
     dbClient.close();
   } catch (err) {
     console.error(`Error: ${err.message}`);
@@ -61,3 +61,6 @@ export async function dropCollection(dbClient, objectId, portalId) {
   // });
   // client.close();
 }
+
+// const client = await createMongoConnection();
+// client.db(`Account_${portalId}`);
