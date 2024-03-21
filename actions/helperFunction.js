@@ -21,6 +21,7 @@ export async function getRecords(dealId, portalId) {
         link: null,
         quantity: Number(item.properties.quantity),
         amount: Number(item.properties.amount),
+        type: "IFRAME",
         actions: [
           {
             type: "IFRAME",
