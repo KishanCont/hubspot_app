@@ -1,42 +1,46 @@
 "use server";
 
 import axios from "axios";
-import { getAccessToken } from "./authToken";
 
-export async function getRecords(dealId, portalId) {
-  const getLineItems = `https://api.hubapi.com/crm/v3/objects/line_items?associations.deals=${dealId}`;
+export async function getItemList(accessToken, dealId) {
   try {
-    const accessToken = await getAccessToken(portalId);
-    const response = await axios.get(getLineItems, {
+    const response = await axios({
+      method: "get",
+      //use dealId  url:`https://api.hubapi.com/crm/v3/objects/deals/${dealId/associations/line_items`,
+      url: `https://api.hubapi.com/crm/v3/objects/deals/${dealId}/associations/line_items`,
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-
-    let data = [];
-    response.data.results.map((item, index) => {
-      data.push({
-        objectId: Number(item.id),
-        title: `Product ${index + 1}`,
-        link: "https://hubspot-app-sapm.onrender.com/",
-        quantity: Number(item.properties.quantity),
-        amount: Number(item.properties.amount),
-        type: "IFRAME",
-        actions: [
-          {
-            type: "IFRAME",
-            width: 890,
-            height: 748,
-            uri: `https://hubspot-app-sapm.onrender.com/dashboard?portalId=${portalId}&dealId=${dealId}`,
-            label: "View",
-          },
-        ],
-      });
-    });
-
-    return data;
+    return response.data.results.map((item) => item.id);
   } catch (error) {
-    console.log(error.message);
+    console.error(
+      "Error exchanging authorization code for tokens:",
+      error.message
+    );
+    throw error;
+  }
+}
+export async function getItemRecord(list, accessToken) {
+  try {
+    let records = [];
+    for (const itemId of list) {
+      const response = await axios({
+        method: "get",
+        url: `https://api.hubapi.com/crm/v3/objects/line_items/${itemId}?properties=Name,amount,quantity,hs_discount_percentage,price`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      records.push(response.data);
+    }
+    return records;
+  } catch (error) {
+    console.error(
+      "Error exchanging authorization code for tokens:",
+      error.message
+    );
+    throw error;
   }
 }
 
