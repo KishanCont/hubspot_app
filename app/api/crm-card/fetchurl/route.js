@@ -23,7 +23,6 @@ export const GET = async (req, res) => {
     const list = await getItemList(accessToken, associatedObjectId);
 
     const record = await getItemRecord(list, accessToken);
-    console.log(record);
 
     let data = [];
     record.map((item, index) => {
@@ -31,11 +30,10 @@ export const GET = async (req, res) => {
         objectId: Number(item.id),
         title: item.properties.name,
         link: null,
-        unitPrice: item.properties.price,
+        unitPrice: Number(item.properties.price),
         quantity: Number(item.properties.quantity),
         discount: `${item.properties.hs_discount_percentage || 0}%`,
         amount: Number(item.properties.amount),
-        type: "IFRAME",
         actions: [
           {
             type: "IFRAME",

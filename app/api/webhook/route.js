@@ -10,19 +10,14 @@ export const POST = async (req, res) => {
     const db = dbClient.db(dbName);
 
     if (subscriptionType === "product.creation") {
-      await createProductCollection(db, objectId, portalId);
-      return Response.json({ success: "Data saved to MongoDB" });
+      await createProductCollection(db, objectId, Number(portalId));
     } else if (subscriptionType === "product.deletion") {
-      await dropCollection(db, objectId, portalId);
-      return Response.json({ success: "Collection Deleted" });
+      await dropCollection(db, objectId, Number(portalId));
     }
 
     dbClient.close();
-    return Response.json({ success: "Data saved to MongoDB" });
+    return Response.json({ success: true });
   } catch (e) {
-    e.message === "HTTP request failed"
-      ? console.error(JSON.stringify(e.response, null, 2))
-      : console.error(e);
-    return Response.json({ error: e.message });
+    return Response.json({ message: e.message });
   }
 };
