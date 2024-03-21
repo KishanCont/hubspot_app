@@ -14,7 +14,7 @@ export async function getAccessToken(portalId) {
     dbClient.close();
     return accessToken;
   } catch (error) {
-    console.error("not get access token", error.message);
+    console.error("Not get access token", error.message);
   }
 }
 

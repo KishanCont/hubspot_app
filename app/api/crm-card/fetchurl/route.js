@@ -1,4 +1,9 @@
-import { getRecords } from "@/actions/helperFunction";
+import { getAccessToken } from "@/actions/authToken";
+import {
+  getItemList,
+  getItemRecord,
+  getRecords,
+} from "@/actions/helperFunction";
 
 export const GET = async (req, res) => {
   try {
@@ -7,16 +12,41 @@ export const GET = async (req, res) => {
     const portalId = req.nextUrl.searchParams.get("portalId");
     const userId = req.nextUrl.searchParams.get("userId");
 
-    if (!associatedObjectId) {
+    if (!associatedObjectId || !portalId || !userId) {
       return Response.json({
-        message: "No associatedObjectId provided",
+        message: "Fields are required",
       });
     }
 
-    const record = await getRecords(
-      Number(associatedObjectId),
-      Number(portalId)
-    );
+    const accessToken = await getAccessToken(Number(portalId));
+
+    const list = await getItemList(accessToken, associatedObjectId);
+
+    const record = await getItemRecord(list, accessToken);
+    console.log(record);
+
+    let data = [];
+    record.map((item, index) => {
+      data.push({
+        objectId: Number(item.id),
+        title: item.properties.name,
+        link: null,
+        unitPrice: item.properties.price,
+        quantity: Number(item.properties.quantity),
+        discount: `${item.properties.hs_discount_percentage || 0}%`,
+        amount: Number(item.properties.amount),
+        type: "IFRAME",
+        actions: [
+          {
+            type: "IFRAME",
+            width: 890,
+            height: 748,
+            uri: `https://hubspot-app-sapm.onrender.com/dashboard?portalId=${portalId}&dealId=${associatedObjectId}`,
+            label: "View",
+          },
+        ],
+      });
+    });
 
     if (!record) {
       return Response.json({
@@ -25,7 +55,7 @@ export const GET = async (req, res) => {
     }
 
     return Response.json({
-      results: record,
+      results: data,
     });
   } catch (error) {
     return Response.json({
