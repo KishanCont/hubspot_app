@@ -1,3 +1,4 @@
+import { generateSlug } from "@/lib/utils";
 import { getAccessToken } from "./authToken";
 import axios from "axios";
 
@@ -44,7 +45,9 @@ export async function createProductCollection(dbClient, productId, portalId) {
   try {
     const accessToken = await getAccessToken(portalId);
     const product = await getProduct(productId, accessToken);
-    await dbClient.createCollection(`${product.properties.name}_${productId}`);
+    await dbClient.createCollection(
+      generateSlug(`${product.properties.name}_${productId}`)
+    );
   } catch (err) {
     console.error(`Error: ${err.message}`);
   }

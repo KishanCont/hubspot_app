@@ -48,14 +48,9 @@ export async function getCollectionData(databaseName, selectedCollection) {
   }
 }
 
-async function updateCollection(
-  uri,
-  databaseName,
-  selectedCollection,
-  collection
-) {
+async function updateCollection(databaseName, selectedCollection, collection) {
   // Create a new MongoClient
-  const client = await MongoClient.connect(uri);
+  const client = await createMongoConnection();
   const dbo = client.db(databaseName);
   await dbo.collection(selectedCollection).updateMany(collection);
   console.log("Collection:");
@@ -64,4 +59,16 @@ async function updateCollection(
     console.log("Rows:", document.rows);
   });
   client.close();
+}
+
+export async function insertData(dbName, selectedCollection, data) {
+  try {
+    const client = await createMongoConnection();
+    const dbo = client.db(dbName);
+    await dbo.collection(selectedCollection).drop();
+    const result = await dbo.collection(selectedCollection).insertMany(data);
+    console.log(result);
+  } catch (error) {
+    console.log(error);
+  }
 }
