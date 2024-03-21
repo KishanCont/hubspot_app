@@ -1,5 +1,5 @@
 "use client";
-import { insertData } from "@/actions/retrieval";
+import { getCollectionData, insertData } from "@/actions/retrieval";
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -16,6 +16,7 @@ import {
 } from "@mui/x-data-grid";
 import { randomArrayItem, randomId } from "@mui/x-data-grid-generator";
 import * as React from "react";
+import { useEffect } from "react";
 
 const initialRows = [];
 
@@ -37,7 +38,7 @@ function EditToolbar(props) {
     ]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
-      [id]: { mode: GridRowModes.Edit, billing_start_date: "name" },
+      [id]: { mode: GridRowModes.Edit, focus: "billing_start_date" },
     }));
   };
 
@@ -53,6 +54,12 @@ function EditToolbar(props) {
 export default function TableComponent({ dbName, collection }) {
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState({});
+
+  useEffect(() => {
+    getCollectionData(dbName, collection).then((data) => {
+      setRows(data);
+    });
+  }, []);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -99,7 +106,7 @@ export default function TableComponent({ dbName, collection }) {
       field: "billing_start_date",
       headerName: "Billing Start Date",
       type: "date",
-      width: 180,
+      width: 150,
       editable: true,
     },
 
@@ -123,6 +130,13 @@ export default function TableComponent({ dbName, collection }) {
     {
       field: "quantity",
       headerName: "Quantity",
+      width: 180,
+      editable: true,
+      type: "number",
+    },
+    {
+      field: "discount",
+      headerName: "Discount",
       width: 180,
       editable: true,
       type: "number",

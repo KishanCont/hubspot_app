@@ -1,18 +1,7 @@
 import { generateSlug } from "@/lib/utils";
 import { getAccessToken } from "./authToken";
 import axios from "axios";
-
-export async function dropCollection(uri, databaseName, selectedCollection) {
-  // Create a new MongoClient
-  const client = await MongoClient.connect(uri);
-  const dbo = client.db(databaseName);
-  await dbo.collection(selectedCollection).drop(function (err, delOK) {
-    if (err) throw err;
-    if (delOK) console.log("Collection deleted");
-    db.close();
-  });
-  client.close();
-}
+import { createMongoConnection } from "./dbConnetion";
 
 export async function renameCollection(uri, databaseName, selectedCollection) {
   // Create a new MongoClient
@@ -41,14 +30,34 @@ export async function getProduct(productId, accessToken) {
   }
 }
 
-export async function createProductCollection(dbClient, productId, portalId) {
+export async function createProductCollection(dbClient, objectId, portalId) {
   try {
     const accessToken = await getAccessToken(portalId);
-    const product = await getProduct(productId, accessToken);
+    const product = await getProduct(objectId, accessToken);
     await dbClient.createCollection(
-      generateSlug(`${product.properties.name}_${productId}`)
+      generateSlug(`${product.properties.name}_${objectId}`)
     );
   } catch (err) {
     console.error(`Error: ${err.message}`);
   }
+}
+
+export async function dropCollection(dbClient, objectId, portalId) {
+  // Create a new MongoClient
+  try {
+    const accessToken = await getAccessToken(portalId);
+    const product = await getProduct(objectId, accessToken);
+    await dbClient.dropCollection(
+      generateSlug(`${product.properties.name}_${objectId}`)
+    );
+    dbClient.close();
+  } catch (err) {
+    console.error(`Error: ${err.message}`);
+  }
+  // await dbo.collection(selectedCollection).drop(function (err, delOK) {
+  //   if (err) throw err;
+  //   if (delOK) console.log("Collection deleted");
+  //   db.close();
+  // });
+  // client.close();
 }
