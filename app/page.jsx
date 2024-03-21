@@ -1,46 +1,13 @@
 "use client";
-import { generateSlug } from "@/lib/utils";
-import { Box, Button, Container, TextField } from "@mui/material";
+import { AUTHORIZATION_URL } from "@/constants";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect } from "react";
 
 const page = () => {
-  const [tableName, setTableName] = useState("");
   const router = useRouter();
-
-  return (
-    <Container>
-      <Box
-        display={"flex"}
-        justifyItems={"center"}
-        gap={2}
-        alignItems={"center"}
-        p={4}
-        margin={"auto"}
-        maxWidth={"400px"}
-      >
-        <TextField
-          size={"small"}
-          label="Table Name"
-          value={tableName}
-          onChange={(e) => setTableName(e.target.value)}
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          className="bg-primary"
-          onClick={() => {
-            if (tableName.length > 0) {
-              localStorage.setItem("tableName", JSON.stringify(tableName));
-            }
-            router.push(`/${generateSlug(tableName)}`);
-          }}
-        >
-          Create
-        </Button>
-      </Box>
-    </Container>
-  );
+  useEffect(() => {
+    router.push(AUTHORIZATION_URL);
+  }, []);
 };
 
 export default page;
