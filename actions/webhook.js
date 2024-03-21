@@ -23,6 +23,8 @@ export async function getProduct(productId, accessToken) {
       },
     });
 
+    console.log("Data", response.data);
+
     return response.data;
   } catch (error) {
     console.error(error.message);
@@ -33,6 +35,9 @@ export async function createProductCollection(dbClient, objectId, portalId) {
   try {
     const accessToken = await getAccessToken(portalId);
     const product = await getProduct(objectId, accessToken);
+    if (!product) {
+      throw new Error("Not get product");
+    }
     await dbClient.createCollection(
       generateSlug(`${product.properties.name}_${objectId}`)
     );
