@@ -18,7 +18,7 @@ export async function getRecords(dealId, portalId) {
       data.push({
         objectId: Number(item.id),
         title: `Product ${index + 1}`,
-        link: null,
+        link: "https://hubspot-app-sapm.onrender.com/",
         quantity: Number(item.properties.quantity),
         amount: Number(item.properties.amount),
         type: "IFRAME",
