@@ -1,11 +1,12 @@
 "use client";
+import { insertData } from "@/actions/retrieval";
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
-import { Box, Button, Container } from "@mui/material";
-
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import {
   DataGrid,
   GridActionsCellItem,
@@ -13,65 +14,45 @@ import {
   GridRowModes,
   GridToolbarContainer,
 } from "@mui/x-data-grid";
+import { randomArrayItem, randomId } from "@mui/x-data-grid-generator";
+import * as React from "react";
 
-import saveCollection from "@/actions";
-import { generateSlug } from "@/lib/utils";
-import { randomId } from "@mui/x-data-grid-generator";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+const initialRows = [];
 
-const TableComponent = ({ data, table, fields }) => {
-  const [rows, setRows] = useState(data || []);
-  const [rowModesModel, setRowModesModel] = useState({});
-  const [tableName, setTableName] = useState(table || "");
-  const [inputFields, setInputFields] = useState(
-    fields || [{ columnHeader: "", headerType: "", dataType: "" }]
+function EditToolbar(props) {
+  const { setRows, setRowModesModel } = props;
+
+  const handleClick = () => {
+    const id = randomId();
+    setRows((oldRows) => [
+      ...oldRows,
+      {
+        id,
+        billing_start_date: "",
+        term: "",
+        billing_frequency: "",
+        quantity: "",
+        isNew: true,
+      },
+    ]);
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, billing_start_date: "name" },
+    }));
+  };
+
+  return (
+    <GridToolbarContainer>
+      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+        Add record
+      </Button>
+    </GridToolbarContainer>
   );
+}
 
-  const router = useRouter();
-
-  useEffect(() => {
-    if (data) {
-      setRows(data);
-    }
-    if (!table && !fields) {
-      setInputFields(JSON.parse(localStorage.getItem("inputFields")));
-      setTableName(JSON.parse(localStorage.getItem("tableName")));
-    }
-  }, []);
-
-  const inputChildren = inputFields
-    .filter((item) => item.headerType === "input")
-    .map((item) => {
-      return {
-        field: generateSlug(item.columnHeader),
-        headerName: item.columnHeader,
-        editable: true,
-        type: item.dataType,
-      };
-    });
-
-  const outputChildren = inputFields
-    .filter((item) => item.headerType === "output")
-    .map((item) => {
-      return {
-        field: generateSlug(item.columnHeader),
-        headerName: item.columnHeader,
-        editable: true,
-        type: item.dataType,
-      };
-    });
-
-  const columnGroupingModel = [
-    {
-      groupId: "Input",
-      children: inputChildren,
-    },
-    {
-      groupId: "Output",
-      children: outputChildren,
-    },
-  ];
+export default function TableComponent({ dbName, collection }) {
+  const [rows, setRows] = React.useState(initialRows);
+  const [rowModesModel, setRowModesModel] = React.useState({});
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -79,19 +60,19 @@ const TableComponent = ({ data, table, fields }) => {
     }
   };
 
-  const handleEditClick = (id) => {
+  const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
-  const handleSaveClick = (id) => {
+  const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) => {
+  const handleDeleteClick = (id) => () => {
     setRows(rows.filter((row) => row.id !== id));
   };
 
-  const handleCancelClick = (id) => {
+  const handleCancelClick = (id) => () => {
     setRowModesModel({
       ...rowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
@@ -114,9 +95,38 @@ const TableComponent = ({ data, table, fields }) => {
   };
 
   const columns = [
-    { field: "id", headerName: "Id" },
-    ...inputChildren,
-    ...outputChildren,
+    {
+      field: "billing_start_date",
+      headerName: "Billing Start Date",
+      type: "date",
+      width: 180,
+      editable: true,
+    },
+
+    {
+      field: "term",
+      headerName: "Term (Month)",
+      type: "number",
+      align: "left",
+      headerAlign: "left",
+      editable: true,
+      width: 180,
+    },
+    {
+      field: "billing_frequency",
+      headerName: "Billing Frquency",
+      type: "singleSelect",
+      width: 180,
+      editable: true,
+      valueOptions: ["Annually", "Quarterly", "Yearly", "Bi-Annually"],
+    },
+    {
+      field: "quantity",
+      headerName: "Quantity",
+      width: 180,
+      editable: true,
+      type: "number",
+    },
     {
       field: "actions",
       type: "actions",
@@ -134,13 +144,13 @@ const TableComponent = ({ data, table, fields }) => {
               sx={{
                 color: "primary.main",
               }}
-              onClick={() => handleSaveClick(id)}
+              onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
               label="Cancel"
               className="textPrimary"
-              onClick={() => handleCancelClick(id)}
+              onClick={handleCancelClick(id)}
               color="inherit"
             />,
           ];
@@ -151,13 +161,13 @@ const TableComponent = ({ data, table, fields }) => {
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={() => handleEditClick(id)}
+            onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={() => handleDeleteClick(id)}
+            onClick={handleDeleteClick(id)}
             color="inherit"
           />,
         ];
@@ -165,89 +175,43 @@ const TableComponent = ({ data, table, fields }) => {
     },
   ];
 
-  function EditToolbar(props) {
-    const { setRows, setRowModesModel } = props;
-
-    const handleClick = () => {
-      const id = randomId();
-      let newRow = {};
-
-      columns.map((item) => {
-        if (item.field === "id") {
-          newRow[item.field] = id;
-        } else {
-          newRow[item.field] = "";
-        }
-      });
-
-      setRows((oldRows) => [...oldRows, { ...newRow, isNew: true }]);
-      setRowModesModel((oldModel) => ({
-        ...oldModel,
-        [id]: { mode: GridRowModes.Edit },
-      }));
-    };
-
-    return (
-      <GridToolbarContainer>
-        <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-          Add record
-        </Button>
-      </GridToolbarContainer>
-    );
-  }
-
   return (
-    <Container>
-      <Box
-        p={5}
-        sx={{
-          height: 500,
-          width: "100%",
-          "& .actions": {
-            color: "text.secondary",
-          },
-          "& .textPrimary": {
-            color: "text.primary",
-          },
+    <Box
+      sx={{
+        height: 500,
+        width: "100%",
+        "& .actions": {
+          color: "text.secondary",
+        },
+        "& .textPrimary": {
+          color: "text.primary",
+        },
+        p: 5,
+      }}
+    >
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        editMode="row"
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={handleRowModesModelChange}
+        onRowEditStop={handleRowEditStop}
+        processRowUpdate={processRowUpdate}
+        slots={{
+          toolbar: EditToolbar,
+        }}
+        slotProps={{
+          toolbar: { setRows, setRowModesModel },
+        }}
+      />
+      <Button
+        onClick={async () => {
+          console.log(rows);
+          await insertData(dbName, collection, rows);
         }}
       >
-        <h1>{tableName}</h1>
-        <DataGrid
-          experimentalFeatures={{ columnGrouping: true }}
-          rows={rows}
-          columnGroupingModel={columnGroupingModel}
-          columns={columns}
-          editMode="row"
-          rowModesModel={rowModesModel}
-          onRowModesModelChange={handleRowModesModelChange}
-          onRowEditStop={handleRowEditStop}
-          processRowUpdate={processRowUpdate}
-          slots={{
-            toolbar: EditToolbar,
-          }}
-          slotProps={{
-            toolbar: { setRows, setRowModesModel },
-          }}
-        />
-
-        <Button
-          onClick={async () => {
-            await saveCollection(generateSlug(tableName), [
-              {
-                slug: generateSlug(tableName),
-                tableName: tableName,
-                columnsName: inputFields,
-                rows: rows,
-              },
-            ]);
-            router.push("/dashboard");
-          }}
-        >
-          Submit
-        </Button>
-      </Box>
-    </Container>
+        Submit
+      </Button>
+    </Box>
   );
-};
-
-export default TableComponent;
+}
