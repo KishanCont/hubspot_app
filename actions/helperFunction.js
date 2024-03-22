@@ -56,15 +56,14 @@ export async function insertDocuments(db, collectionName, documents) {
 
 export async function dropLineItem(accessToken, LineItemId) {
   try {
-    const body = { inputs: [{ id: { LineItemId } }] };
-    const response = await axios({
-      method: "post",
-      url: "https://api.hubapi.com/crm/v3/objects/line_items/batch/archive",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      data: body,
-    });
+    const response = await axios.delete(
+      `https://api.hubapi.com/crm/v3/objects/line_items/${LineItemId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
 
     if (!response) {
       return false;
