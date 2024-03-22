@@ -1,6 +1,7 @@
-import { generateSlug } from "@/lib/utils";
+import { decodeSlug, generateSlug, getId, removeId } from "@/lib/utils";
 import axios from "axios";
 import { getAccessToken } from "./authToken";
+import { getCollectionList } from "./retrieval";
 
 export async function renameCollection(uri, databaseName, selectedCollection) {
   // Create a new MongoClient
@@ -49,22 +50,25 @@ export async function createProductCollection(dbClient, objectId, portalId) {
 export async function dropCollection(dbClient, objectId, portalId) {
   // Create a new MongoClient
   try {
-    const accessToken = await getAccessToken(portalId);
+    const collections = await getCollectionList(`Account_${portalId}`);
 
-    if (!accessToken) {
-      return console.error("Not get access token");
+    const collection = collections.filter(
+      (collection) => Number(getId(decodeSlug(collection.name))) === objectId
+    );
+
+    if (!collection) {
+      throw new Error("Not get collection");
     }
 
-    const product = await getProduct(objectId, accessToken);
+    const response = await dbClient
+      .collection(collection[0].name)
+      .drop(collection.name);
 
-    if (!product) {
-      throw new Error("Not get product");
+    if (!response) {
+      throw new Error("Not drop collection");
     }
 
-    await dbClient
-      .collection(generateSlug(`${product.properties.name}_${objectId}`))
-      .drop();
-    dbClient.close();
+    return true;
   } catch (err) {
     console.error(`Error: ${err.message}`);
   }

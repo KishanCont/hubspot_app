@@ -10,13 +10,23 @@ export const POST = async (req, res) => {
     const db = dbClient.db(dbName);
 
     if (subscriptionType === "product.creation") {
-      await createProductCollection(db, objectId, Number(portalId));
+      const response = await createProductCollection(
+        db,
+        objectId,
+        Number(portalId)
+      );
+      if (!response) {
+        return Response.json({ message: "Not Created" });
+      }
     } else if (subscriptionType === "product.deletion") {
-      await dropCollection(db, objectId, Number(portalId));
+      const response = await dropCollection(db, objectId, Number(portalId));
+      if (!response) {
+        return Response.json({ message: "Not Deleted" });
+      }
     }
 
     dbClient.close();
-    return Response.json({ data });
+    return Response.json({ message: "success" });
   } catch (e) {
     return Response.json({ message: e.message });
   }

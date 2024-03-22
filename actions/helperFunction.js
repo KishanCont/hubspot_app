@@ -81,16 +81,8 @@ export async function dropLineItem(accessToken, LineItemId) {
 
 export async function createLineItem(accessToken, body) {
   try {
-    body = {
-      properties: {
-        name: " My VS Deal",
-        price: "800",
-        quantity: "5",
-        hs_product_id: "2696558198",
-        recurringbillingfrequency: "monthly",
-        hs_recurring_billing_period: "P24M",
-        hs_discount_percentage: "15",
-      },
+    const body = {
+      properties: {},
     };
     const response = await axios({
       method: "post",
@@ -124,20 +116,24 @@ export async function associateLineToDeal(accessToken, dealId, LineItemId) {
         },
       ],
     };
-    const response = await axios({
-      method: "post",
-      url: "https://api.hubapi.com/crm/v3/associations/Line_items/Deal/batch/create",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      data: body,
-    });
+
+    const response = await axios.post(
+      "https://api.hubapi.com/crm/v3/associations/Line_items/Deal/batch/create",
+      body,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     return response.data;
   } catch (error) {
     console.error(
       "Error exchanging authorization code for tokens:",
       error.message
     );
-    throw error;
+    return Response.json({ error: error });
   }
 }
