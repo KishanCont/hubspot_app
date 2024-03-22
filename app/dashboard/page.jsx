@@ -6,18 +6,18 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const DashboardPage = ({ searchParams }) => {
-  const [collection, setCollection] = useState([]);
+  const [collections, setCollections] = useState([]);
 
   const portalId = searchParams.portalId;
   const dbName = `Account_${portalId}`;
   useEffect(() => {
     if (portalId) {
       getCollectionList(dbName)
-        .then((res) => setCollection(res))
+        .then((res) => setCollections(res))
         .catch((error) => console.log(error));
     }
   }, []);
-  if (collection.length === 0)
+  if (collections.length === 0)
     return (
       <div className="max-w-5xl p-5 mx-auto">
         <p>No Collections</p>
@@ -25,8 +25,8 @@ const DashboardPage = ({ searchParams }) => {
     );
   return (
     <div className="max-w-5xl p-5 mx-auto">
-      {collection.length > 0 ? (
-        collection.map((collection, i) => (
+      {collections.length > 0 ? (
+        collections.map((collection, i) => (
           <div className="flex gap-5 " key={i}>
             <Link
               className="text-blue-400 underline"

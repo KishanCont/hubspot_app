@@ -6,8 +6,35 @@ export const POST = async (req, res) => {
     const body = await req.json();
 
     const { portalId, dealId } = body;
+    const {
+      name,
+      price,
+      quantity,
+      hs_product_id,
+      recurringbillingfrequency,
+      hs_recurring_billing_period,
+      hs_discount_percentage,
+    } = body;
+
+    const newBody = {
+      properties: {
+        name,
+        price,
+        quantity,
+        hs_product_id,
+        recurringbillingfrequency,
+        hs_recurring_billing_period,
+        hs_discount_percentage,
+      },
+    };
+
     const accessToken = await getAccessToken(Number(portalId));
-    const lineItemId = await createLineItem(accessToken, body);
+
+    const lineItemId = await createLineItem(accessToken, newBody);
+    if (!lineItemId) {
+      return Response.json({ message: "error" });
+    }
+
     const response = await associateLineToDeal(accessToken, dealId, lineItemId);
     if (!response) {
       return Response.json({ message: "error" });
