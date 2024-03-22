@@ -30,7 +30,7 @@ const DashboardPage = ({ searchParams }) => {
           <div className="flex gap-5 " key={i}>
             <Link
               className="text-blue-400 underline"
-              href={`/dashboard/${dbName}/${generateSlug(collection.name)}`}
+              href={`/dashboard/${portalId}/${generateSlug(collection.name)}`}
             >
               {removeId(decodeSlug(collection.name))}
             </Link>
