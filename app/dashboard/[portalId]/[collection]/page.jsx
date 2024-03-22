@@ -4,7 +4,10 @@ import React from "react";
 const Table = ({ params }) => {
   return (
     <div>
-      <TableComponent dbName={params.dbName} collection={params.collection} />
+      <TableComponent
+        portalId={params.portalId}
+        collection={params.collection}
+      />
     </div>
   );
 };

@@ -15,10 +15,9 @@ import {
   GridToolbarContainer,
 } from "@mui/x-data-grid";
 import { randomArrayItem, randomId } from "@mui/x-data-grid-generator";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useEffect } from "react";
-
-const initialRows = [];
 
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
@@ -51,12 +50,13 @@ function EditToolbar(props) {
   );
 }
 
-export default function TableComponent({ dbName, collection }) {
-  const [rows, setRows] = React.useState(initialRows);
+export default function TableComponent({ portalId, collection }) {
+  const router = useRouter();
+  const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
 
   useEffect(() => {
-    getCollectionData(dbName, collection).then((data) => {
+    getCollectionData(`Account_${portalId}`, collection).then((data) => {
       setRows(data);
     });
   }, []);
@@ -117,27 +117,27 @@ export default function TableComponent({ dbName, collection }) {
       align: "left",
       headerAlign: "left",
       editable: true,
-      width: 180,
+      width: 120,
     },
     {
       field: "billing_frequency",
       headerName: "Billing Frquency",
       type: "singleSelect",
-      width: 180,
+      width: 130,
       editable: true,
       valueOptions: ["Annually", "Quarterly", "Yearly", "Bi-Annually"],
     },
     {
       field: "quantity",
       headerName: "Quantity",
-      width: 180,
+      width: 110,
       editable: true,
       type: "number",
     },
     {
       field: "discount",
       headerName: "Discount",
-      width: 180,
+      width: 110,
       editable: true,
       type: "number",
     },
@@ -220,8 +220,12 @@ export default function TableComponent({ dbName, collection }) {
       />
       <Button
         onClick={async () => {
-          console.log(rows);
-          await insertData(dbName, collection, rows);
+          if (rows.length === 0) {
+            alert("Please add at least one record");
+            return;
+          }
+          await insertData(`Account_${portalId}`, collection, rows);
+          router.push(`/dashboard?portalId=${portalId}`);
         }}
       >
         Submit
