@@ -81,9 +81,6 @@ export async function dropLineItem(accessToken, LineItemId) {
 
 export async function createLineItem(accessToken, body) {
   try {
-    const body = {
-      properties: {},
-    };
     const response = await axios({
       method: "post",
       url: "https://api.hubapi.com/crm/v3/objects/line_items",
@@ -103,14 +100,15 @@ export async function createLineItem(accessToken, body) {
 }
 export async function associateLineToDeal(accessToken, dealId, LineItemId) {
   try {
+    console.log(LineItemId);
     const body = {
       inputs: [
         {
           from: {
-            id: { LineItemId },
+            id: `${LineItemId}`,
           },
           to: {
-            id: { dealId },
+            id: `${dealId}`,
           },
           type: "line_item_to_deal",
         },

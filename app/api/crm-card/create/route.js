@@ -19,7 +19,6 @@ export const POST = async (req, res) => {
     const newBody = {
       properties: {
         name,
-        price,
         quantity,
         hs_product_id,
         recurringbillingfrequency,
@@ -27,6 +26,8 @@ export const POST = async (req, res) => {
         hs_discount_percentage,
       },
     };
+
+    console.log(newBody);
 
     const accessToken = await getAccessToken(Number(portalId));
 
