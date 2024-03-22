@@ -4,6 +4,7 @@ import {
   getItemRecord,
   getRecords,
 } from "@/actions/helperFunction";
+import { DOMAIN } from "@/constants";
 
 export const GET = async (req, res) => {
   try {
@@ -39,7 +40,7 @@ export const GET = async (req, res) => {
             type: "IFRAME",
             width: 890,
             height: 748,
-            uri: `https://hubspot-app-sapm.onrender.com/dashboard/edit?lineItemId=${item.id}&hsProductId=${item.properties.hs_product_id}&portalId=${portalId}`,
+            uri: `${DOMAIN}/dashboard/edit?lineItemId=${item.id}&hsProductId=${item.properties.hs_product_id}&portalId=${portalId}`,
             label: "Edit",
           },
           {
@@ -49,24 +50,8 @@ export const GET = async (req, res) => {
             cancelButtonText: "No",
             httpMethod: "DELETE",
             associatedObjectProperties: ["protected_account"],
-            uri: `https://hubspot-app-sapm.onrender.com/api/crm-card/delete?lineItemId=${item.id}&portalId=${portalId}`,
+            uri: `${DOMAIN}/api/crm-card/delete?lineItemId=${item.id}&portalId=${portalId}`,
             label: "Delete",
-          },
-        ],
-        secondaryActions: [
-          {
-            type: "IFRAME",
-            width: 890,
-            height: 748,
-            uri: `https://hubspot-app-sapm.onrender.com/dashboard/create?portalId=${portalId}&dealId=${associatedObjectId}`,
-            label: "Create Line Items",
-          },
-          {
-            type: "IFRAME",
-            width: 890,
-            height: 748,
-            uri: `https://hubspot-app-sapm.onrender.com/dashboard?portalId=${portalId}&dealId=${associatedObjectId}`,
-            label: "Edit Collections",
           },
         ],
       });
@@ -80,6 +65,22 @@ export const GET = async (req, res) => {
 
     return Response.json({
       results: data,
+      secondaryActions: [
+        {
+          type: "IFRAME",
+          width: 890,
+          height: 748,
+          uri: `${DOMAIN}/dashboard/create?portalId=${portalId}&dealId=${associatedObjectId}`,
+          label: "Create Line Items",
+        },
+        {
+          type: "IFRAME",
+          width: 890,
+          height: 748,
+          uri: `${DOMAIN}/dashboard?portalId=${portalId}&dealId=${associatedObjectId}`,
+          label: "Edit Collections",
+        },
+      ],
     });
   } catch (error) {
     return Response.json({
