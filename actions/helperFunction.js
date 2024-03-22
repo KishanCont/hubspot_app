@@ -56,7 +56,7 @@ export async function insertDocuments(db, collectionName, documents) {
 
 export async function dropLineItem(accessToken, LineItemId) {
   try {
-    body = { inputs: [{ id: { LineItemId } }] };
+    const body = { inputs: [{ id: { LineItemId } }] };
     const response = await axios({
       method: "post",
       url: "https://api.hubapi.com/crm/v3/objects/line_items/batch/archive",
@@ -65,6 +65,11 @@ export async function dropLineItem(accessToken, LineItemId) {
       },
       data: body,
     });
+
+    if (!response) {
+      return false;
+    }
+
     return response;
   } catch (error) {
     console.error(
@@ -107,7 +112,7 @@ export async function createLineItem(accessToken, body) {
 }
 export async function associateLineToDeal(accessToken, dealId, LineItemId) {
   try {
-    body = {
+    const body = {
       inputs: [
         {
           from: {

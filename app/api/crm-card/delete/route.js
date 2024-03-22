@@ -6,9 +6,10 @@ export const POST = async (req, res) => {
     const lineItemId = req.nextUrl.searchParams.get("lineItemId");
     const portalId = req.nextUrl.searchParams.get("portalId");
     const accessToken = await getAccessToken(Number(portalId));
+
     await dropLineItem(accessToken, lineItemId);
     return Response.json({ message: "success" });
   } catch (error) {
-    return Response.json({ message: error.message });
+    return Response.json({ error: error.message });
   }
 };
