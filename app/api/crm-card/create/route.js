@@ -7,8 +7,6 @@ export const POST = async (req, res) => {
 
     const { portalId, dealId } = body;
     const {
-      name,
-      price,
       quantity,
       hs_product_id,
       recurringbillingfrequency,
@@ -18,7 +16,6 @@ export const POST = async (req, res) => {
 
     const newBody = {
       properties: {
-        name,
         quantity,
         hs_product_id,
         recurringbillingfrequency,
