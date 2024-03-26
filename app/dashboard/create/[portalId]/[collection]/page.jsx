@@ -1,15 +1,12 @@
 "use client";
-import React from "react";
-import axios from "axios";
-import { useState } from "react";
-import TableComponent from "@/components/TableComponent";
-import { decodeSlug, getId } from "@/lib/utils";
-import { useEffect } from "react";
 import { getCollectionData } from "@/actions/retrieval";
 import SimpleTable from "@/components/SimpleTable";
-import { Container, Button } from "@mui/material";
+import { decodeSlug, getId } from "@/lib/utils";
+import { Button, Container } from "@mui/material";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-const CollectionTable = ({ params }) => {
+const CollectionTable = ({ params, searchParams }) => {
   const [data, setData] = useState({
     name: "",
     quantity: "",
@@ -25,7 +22,7 @@ const CollectionTable = ({ params }) => {
   const handleClick = async () => {
     const response = await axios.post("/api/crm-card/create", {
       portalId,
-      dealId,
+      dealId: searchParams.dealId,
       ...data,
     });
   };

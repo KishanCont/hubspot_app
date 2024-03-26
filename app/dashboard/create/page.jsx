@@ -30,7 +30,7 @@ const CreatePage = ({ searchParams }) => {
           <div className="flex gap-5 " key={i}>
             <Link
               className="text-blue-400 underline"
-              href={`/dashboard/create/${searchParams.portalId}/${collection.name}`}
+              href={`/dashboard/create/${searchParams.portalId}/${collection.name}?dealId=${searchParams.dealId}`}
             >
               {removeId(decodeSlug(collection.name))}
             </Link>
