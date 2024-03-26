@@ -1,87 +1,46 @@
 "use client";
-import React from "react";
-import axios from "axios";
-import { useState } from "react";
 
-const Create = ({ searchParams }) => {
-  const [data, setData] = useState({
-    name: "",
-    price: "",
-    quantity: "",
-    hs_product_id: "",
-    recurringbillingfrequency: "",
-    hs_recurring_billing_period: "",
-    hs_discount_percentage: "",
-  });
-  const handleClick = async () => {
-    const { portalId, dealId } = searchParams;
-    const response = await axios.post("/api/crm-card/create", {
-      portalId,
-      dealId,
-      ...data,
-    });
-  };
+import { getCollectionList } from "@/actions/retrieval";
+import { decodeSlug, generateSlug, removeId } from "@/lib/utils";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
+const CreatePage = ({ searchParams }) => {
+  const [collections, setCollections] = useState([]);
+
+  const portalId = searchParams.portalId;
+  const dbName = `Account_${portalId}`;
+  useEffect(() => {
+    if (portalId) {
+      getCollectionList(dbName)
+        .then((res) => setCollections(res))
+        .catch((error) => console.log(error));
+    }
+  }, []);
+  if (collections.length === 0)
+    return (
+      <div className="max-w-5xl p-5 mx-auto">
+        <p>No Collections</p>
+      </div>
+    );
   return (
-    <div className="flex flex-col max-w-5xl gap-5 p-5 m-auto">
-      <input
-        type="text"
-        placeholder="name"
-        onChange={(e) => setData({ ...data, name: e.target.value })}
-        value={data.name}
-        className="p-2 border rounded-xl"
-      />
-      <input
-        type="text"
-        placeholder="price"
-        onChange={(e) => setData({ ...data, price: e.target.value })}
-        value={data.price}
-        className="p-2 border rounded-xl"
-      />
-      <input
-        type="text"
-        placeholder="quantity"
-        onChange={(e) => setData({ ...data, quantity: e.target.value })}
-        value={data.quantity}
-        className="p-2 border rounded-xl"
-      />
-      <input
-        type="text"
-        placeholder="hs_product_id"
-        onChange={(e) => setData({ ...data, hs_product_id: e.target.value })}
-        value={data.hs_product_id}
-        className="p-2 border rounded-xl"
-      />
-      <input
-        type="text"
-        placeholder="recurringbillingfrequency"
-        onChange={(e) =>
-          setData({ ...data, recurringbillingfrequency: e.target.value })
-        }
-        value={data.recurringbillingfrequency}
-        className="p-2 border rounded-xl"
-      />
-      <input
-        type="text"
-        placeholder="hs_recurring_billing_period"
-        onChange={(e) =>
-          setData({ ...data, hs_recurring_billing_period: e.target.value })
-        }
-        value={data.hs_recurring_billing_period}
-        className="p-2 border rounded-xl"
-      />
-      <input
-        type="text"
-        placeholder="hs_discount_percentage"
-        onChange={(e) =>
-          setData({ ...data, hs_discount_percentage: e.target.value })
-        }
-        value={data.hs_discount_percentage}
-        className="p-2 border rounded-xl"
-      />
-      <button onClick={handleClick}>Create</button>
+    <div className="max-w-5xl p-5 mx-auto">
+      {collections.length > 0 ? (
+        collections.map((collection, i) => (
+          <div className="flex gap-5 " key={i}>
+            <Link
+              className="text-blue-400 underline"
+              href={`/dashboard/create/${searchParams.portalId}/${collection.name}`}
+            >
+              {removeId(decodeSlug(collection.name))}
+            </Link>
+          </div>
+        ))
+      ) : (
+        <p>Loading</p>
+      )}
     </div>
   );
 };
 
-export default Create;
+export default CreatePage;
