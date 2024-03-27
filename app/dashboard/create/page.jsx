@@ -1,7 +1,7 @@
 "use client";
 
 import { getCollectionList } from "@/actions/retrieval";
-import { decodeSlug, generateSlug, removeId } from "@/lib/utils";
+import { decodeSlug, removeId } from "@/lib/utils";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 

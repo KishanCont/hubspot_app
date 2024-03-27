@@ -19,7 +19,7 @@ export const POST = async (req, res) => {
         quantity,
         hs_product_id,
         recurringbillingfrequency,
-        hs_recurring_billing_period,
+        hs_recurring_billing_period: `P${hs_recurring_billing_period}M`,
         hs_discount_percentage,
       },
     };

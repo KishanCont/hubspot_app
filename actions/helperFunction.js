@@ -98,6 +98,26 @@ export async function createLineItem(accessToken, body) {
     throw error;
   }
 }
+
+export async function editLineItem(accessToken, body, lineItem) {
+  try {
+    const response = await axios({
+      method: "patch",
+      url: `https://api.hubapi.com/crm/v3/objects/line_items/${lineItem}`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      data: body,
+    });
+    return response.data.id;
+  } catch (error) {
+    console.error(
+      "Error exchanging authorization code for tokens:",
+      error.message
+    );
+    throw error;
+  }
+}
 export async function associateLineToDeal(accessToken, dealId, LineItemId) {
   try {
     console.log(LineItemId);
