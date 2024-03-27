@@ -1,3 +1,5 @@
+"use server";
+
 import { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI } from "@/constants/";
 import { createMongoConnection } from "./dbConnetion";
 import axios from "axios";

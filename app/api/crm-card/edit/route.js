@@ -1,5 +1,3 @@
-"use client";
-
 import { getAccessToken } from "@/actions/authToken";
 import { editLineItem } from "@/actions/helperFunction";
 

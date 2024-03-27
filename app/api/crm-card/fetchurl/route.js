@@ -5,6 +5,7 @@ import {
   getRecords,
 } from "@/actions/helperFunction";
 import { DOMAIN } from "@/constants";
+import { generateSlug } from "@/lib/utils";
 
 export const GET = async (req, res) => {
   try {
@@ -40,7 +41,11 @@ export const GET = async (req, res) => {
             type: "IFRAME",
             width: 890,
             height: 748,
-            uri: `${DOMAIN}/dashboard/edit?lineItemId=${item.id}&hsProductId=${item.properties.hs_product_id}&portalId=${portalId}`,
+            uri: `${DOMAIN}/dashboard/edit?lineItemId=${item.id}&hsProductId=${
+              item.properties.hs_product_id
+            }&portalId=${portalId}&name=${generateSlug(
+              item.properties.name
+            )}&dealId=${associatedObjectId}`,
             label: "Edit",
           },
           {
