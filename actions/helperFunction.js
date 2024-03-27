@@ -27,7 +27,7 @@ export async function getItemRecord(list, accessToken) {
     for (const itemId of list) {
       const response = await axios({
         method: "get",
-        url: `https://api.hubapi.com/crm/v3/objects/line_items/${itemId}?properties=Name,amount,quantity,hs_discount_percentage,price,hs_product_id`,
+        url: `https://api.hubapi.com/crm/v3/objects/line_items/${itemId}?properties=Name,amount,quantity,hs_discount_percentage,price,hs_product_id,hs_recurring_billing_period`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
