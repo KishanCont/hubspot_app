@@ -8,12 +8,10 @@ import { useEffect, useState } from "react";
 
 const CollectionTable = ({ params, searchParams }) => {
   const [data, setData] = useState({
-    name: "",
     quantity: "",
     hs_product_id: getId(decodeSlug(params.collection)),
     recurringbillingfrequency: "",
     hs_recurring_billing_period: "",
-    hs_discount_percentage: "",
   });
 
   const [collectionData, setCollectionData] = useState([]);
@@ -25,6 +23,8 @@ const CollectionTable = ({ params, searchParams }) => {
       dealId: searchParams.dealId,
       ...data,
     });
+    if (response.data) alert("success");
+    console.log(response.data);
   };
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const CollectionTable = ({ params, searchParams }) => {
   return (
     <Container>
       <SimpleTable collectionData={collectionData} data={data} />
-      <Container className="flex gap-5 p-5 flex-col ">
+      <Container className="flex space-y-8 flex-col ">
         <div className="flex items-center justify-start gap-5">
           <input
             type="number"
@@ -46,17 +46,19 @@ const CollectionTable = ({ params, searchParams }) => {
             className="p-2 border rounded-xl"
           />
 
-          <input
-            type="text"
-            placeholder="recurringbillingfrequency"
+          <select
             onChange={(e) =>
               setData({ ...data, recurringbillingfrequency: e.target.value })
             }
             value={data.recurringbillingfrequency}
-            className="p-2 border rounded-xl"
-          />
+            className="p-2 bg-white rounded-xl border w-40"
+          >
+            <option value="monthly">Monthly</option>
+            <option value="annually">Annually</option>
+            <option value="bi-annually">Bi-Annually</option>
+          </select>
           <input
-            type="number"
+            type="text"
             placeholder="hs_recurring_billing_period"
             onChange={(e) =>
               setData({ ...data, hs_recurring_billing_period: e.target.value })
